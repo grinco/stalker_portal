@@ -20,27 +20,11 @@
             </then>
         </if>
 
-        <taskdef
-                name="dbdeploy"
-                classname="phing.tasks.ext.dbdeploy.DbDeployTask"/>
-
-        <property
-                name="progs.mysql"
-                value="/usr/bin/mysql"/>
-
         <property
                 name="build.dir"
                 value="../"/>
 
         <resolvepath propertyName="project_path" file="${build.dir}"/>
-
-        <property
-                name="build.dbdeploy.deployfile"
-                value="deploy/scripts/deploy-${DSTAMP}${TSTAMP}.sql"/>
-
-        <property
-                name="build.dbdeploy.undofile"
-                value="deploy/scripts/undo-${DSTAMP}${TSTAMP}.sql"/>
 
         <exec command="stop stalkerd" level="info"/>
 
@@ -87,62 +71,6 @@
 
         <copy file="./src/stalkerd" tofile="/etc/logrotate.d/stalkerd" overwrite="true"/>
 
-        <copy file="./src/init_db.sql" tofile="/tmp/init_db.sql" overwrite="true">
-            <filterchain>
-                <replacetokens>
-                    <token key="DB_NAME" value="${db_name}"/>
-                </replacetokens>
-            </filterchain>
-        </copy>
-
-        <copy file="./src/68-archive_duration.sql" tofile="../db/delta/68-archive_duration.sql" overwrite="true">
-            <filterchain>
-                <replacetokens>
-                    <token key="ARCHIVE_DURATION" value="${tv_archive_parts_number}"/>
-                </replacetokens>
-            </filterchain>
-        </copy>
-
-        <property name="mysql_host" value="${mysql_host}" override="true">
-            <filterchain>
-                <replaceregexp>
-                    <regexp pattern="p:" replace="" ignoreCase="true"/>
-                </replaceregexp>
-            </filterchain>
-        </property>
-
-        <property name="protocol_str" value="--protocol=TCP"/>
-        <if>
-            <and>
-                <equals arg1="${mysql_host}" arg2="localhost"/>
-                <not>
-                    <equals arg1="${mysql_port}" arg2="3306"/>
-                </not>
-            </and>
-            <then>
-                <property name="mysql_host" value="127.0.0.1" override="true"/>
-            </then>
-        </if>
-
-        <if>
-            <equals arg1="${mysql_host}" arg2="localhost"/>
-            <then>
-                <property name="protocol_str" value="" override="true"/>
-            </then>
-        </if>
-
-        <exec command="${progs.mysql} -P${mysql_port} ${protocol_str} -h${mysql_host} -u${mysql_user} -p${mysql_pass} &lt; /tmp/init_db.sql"
-              dir="${build.dir}" checkreturn="false" outputProperty="mysql_init.error.msg" returnProperty="mysql_init.error.code" />
-
-        <if>
-            <not>
-                <equals arg1="${mysql_init.error.code}" arg2="0"/>
-            </not>
-            <then>
-                <fail message="Mysql - ${mysql_init.error.msg}" />
-            </then>
-        </if>
-
         <echo msg="${project_path}"/>
 
         <if>
@@ -181,19 +109,6 @@
             </not>
             <then>
                 <echo msg="${install.error.msg}" level="warning"/>
-            </then>
-        </if>
-
-        <echo msg="Now you will be asked to specify MySQL root password." level="warning"/>
-
-        <exec command="mysql_tzinfo_to_sql /usr/share/zoneinfo 2>/dev/null | mysql -u root -p mysql" level="info" outputProperty="zoneinfo.error.msg" returnProperty="zoneinfo.error.code"/>
-
-        <if>
-            <not>
-                <equals arg1="${zoneinfo.error.code}" arg2="0"/>
-            </not>
-            <then>
-                <echo msg="${zoneinfo.error.msg}" level="warning"/>
             </then>
         </if>
 
