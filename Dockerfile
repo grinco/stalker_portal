@@ -13,12 +13,12 @@ RUN wget --no-check-certificate https://github.com/azhurb/stalker_portal/archive
 RUN unzip master.zip
 RUN mv stalker_portal-master /var/www/stalker_portal/
 
-# Copy custom.ini
-ADD ./stalker_portal/ /var/www/stalker_portal
-
 # Install PHING
 RUN pear channel-discover pear.phing.info && pear upgrade-all
 RUN pear install --alldeps phing/phing
+
+# Copy custom.ini, build.xml.
+ADD ./stalker_portal/ /var/www/stalker_portal
 
 # Deploy cron jobs, etc (useless in docker)
 RUN cd /var/www/stalker_portal/deploy/ && phing
