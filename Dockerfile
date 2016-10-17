@@ -23,8 +23,7 @@ RUN mv /tmp/ioncube_install/ioncube/ioncube_loader_lin_5.5.so /usr/lib/php5/2012
 RUN rm -rf /tmp/ioncube_install
 RUN echo "zend_extension = /usr/lib/php5/20121212/ioncube_loader_lin_5.5.so" >> 00-ioncube.ini
 
-# Add Ioncube.ini
-ADD 20-ioncube.ini /etc/php.d/20-ioncube.ini
+
 
 
 # Install PHING
