@@ -18,7 +18,7 @@ RUN mkdir /tmp/ioncube_install
 WORKDIR /tmp/ioncube_install
 RUN wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz -O /tmp/ioncube_install/ioncube_loaders_lin_x86-64.tar.gz
 RUN tar zxf /tmp/ioncube_install/ioncube_loaders_lin_x86-64.tar.gz
-RUN mv /tmp/ioncube_install/ioncube/ioncube_loader_lin_5.5.so /usr/lib/php5/20121212s
+RUN mv /tmp/ioncube_install/ioncube/ioncube_loader_lin_5.5.so /usr/lib/php5/20121212
 RUN rm -rf /tmp/ioncube_install
 RUN echo "zend_extension = /usr/lib/php5/20121212/ioncube_loader_lin_5.5.so" >> /etc/php5/apache2/conf.d/00-ioncube.ini
 
