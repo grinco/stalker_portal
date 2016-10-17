@@ -12,7 +12,6 @@ RUN apt-get install -y -u apt-utils unzip apache2 nginx-extras memcached mysql-c
 RUN wget --no-check-certificate https://github.com/azhurb/stalker_portal/archive/master.zip
 RUN unzip master.zip
 RUN mv stalker_portal-master /var/www/html/stalker_portal/
-RUN rm /etc/nginx/sites-avaliable/default
 
 # Add IonCube Loaders
 RUN mkdir /tmp/ioncube_install
