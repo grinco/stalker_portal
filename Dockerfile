@@ -11,17 +11,18 @@ RUN apt-get install -y -u apt-utils unzip apache2 nginx-extras memcached mysql-c
 # Unpack, install
 RUN wget --no-check-certificate https://github.com/azhurb/stalker_portal/archive/master.zip
 RUN unzip master.zip
-RUN mv stalker_portal-master /var/www/stalker_portal/
+RUN mv stalker_portal-master /var/www/html/stalker_portal/
+RUN rm /etc/nginx/sites-avaliable/default
 
 # Install PHING
 RUN pear channel-discover pear.phing.info && pear upgrade-all
 RUN pear install --alldeps phing/phing
 
 # Copy custom.ini, build.xml.
-ADD ./stalker_portal/ /var/www/stalker_portal
+ADD ./stalker_portal/ /var/www/html/stalker_portal
 
 # Deploy cron jobs, etc (useless in docker)
-RUN cd /var/www/stalker_portal/deploy/ && phing
+RUN cd /var/www/html/stalker_portal/deploy/ && phing
 
 EXPOSE 8080
 
