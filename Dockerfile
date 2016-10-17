@@ -13,7 +13,7 @@ RUN wget --no-check-certificate https://github.com/azhurb/stalker_portal/archive
 RUN unzip master.zip
 RUN mv stalker_portal-master /var/www/stalker_portal/
 RUN rm /etc/nginx/sites-avaliable/default
-RUN wget --no-check-certificate "https://raw.githubusercontent.com/grinco/stalker_portal/master/etc/nginx/conf.d/default.conf" -O /etc/nginx/sites-available/default
+
 # Install PHING
 RUN pear channel-discover pear.phing.info && pear upgrade-all
 RUN pear install --alldeps phing/phing
