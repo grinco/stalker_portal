@@ -62,3 +62,7 @@ RUN apt-get install -f -y
 EXPOSE 80
 
 CMD ["apache2-foreground"]
+
+WORKDIR /var/www/html/
+
+VOLUME ["/var/www/html/"]
