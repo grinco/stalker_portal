@@ -21,6 +21,10 @@ RUN docker-php-ext-install gettext
 RUN docker-php-ext-install curl
 RUN docker-php-ext-install tidy
 RUN docker-php-ext-install gd
+RUN docker-php-ext-install pdo_mysql
+
+# Set PHP time zone
+RUN echo date.timezone="UTC" > /usr/local/etc/php/conf.d/timezone.ini 
 
 # Unpack, install
 RUN wget --no-check-certificate http://download.middleware-stalker.com/downloads/40cc1cc087474edd0e5ffcb63cecc110/ministra-5.3.0.zip 
@@ -43,14 +47,6 @@ RUN pear install --alldeps phing/phing
 # Copy custom.ini, build.xml.
 ADD ./stalker_portal/ /var/www/html/stalker_portal
 
-# Deploy cron jobs, etc (useless in docker)
-RUN cd /var/www/html/stalker_portal/deploy/ && phing
-RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');"
-RUN php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
-RUN apt-get install sudo
-RUN chown -R www-data:www-data /var/www/
-RUN cd /var/www/html/stalker_portal/deploy/ && sudo --user=www-data php /usr/local/bin/composer install
-
 # Add IonCube Loaders
 RUN mkdir /tmp/ioncube_install
 WORKDIR /tmp/ioncube_install
@@ -59,6 +55,9 @@ RUN tar zxf /tmp/ioncube_install/ioncube_loaders_lin_x86-64.tar.gz
 RUN mv /tmp/ioncube_install/ioncube/ioncube_loader_lin_5.6.so /usr/local/lib/php/extensions/no-debug-non-zts-20131226/
 RUN rm -rf /tmp/ioncube_install
 RUN echo "zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20131226/ioncube_loader_lin_5.6.so" >> /usr/local/etc/php/conf.d/00-ioncube.ini
+
+# Deploy stalker
+RUN cd /var/www/html/stalker_portal/deploy/ && phing
 
 # Finish installing broken packages
 RUN apt-get install -f -y
