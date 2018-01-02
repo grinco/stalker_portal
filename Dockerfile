@@ -27,9 +27,10 @@ RUN docker-php-ext-install pdo_mysql
 RUN echo date.timezone="UTC" > /usr/local/etc/php/conf.d/timezone.ini 
 
 # Unpack, install
-RUN wget --no-check-certificate http://download.middleware-stalker.com/downloads/40cc1cc087474edd0e5ffcb63cecc110/ministra-5.3.0.zip 
-RUN unzip ministra-5.3.0.zip 
-RUN mv infomirgroup-stalker_portal-2feec3a9f374 /var/www/html/stalker_portal/
+ADD ./src/stalker_portal-5.2.0.zip /tmp/stalker_portal-5.2.0.zip
+RUN unzip /tmp/stalker_portal-5.2.0.zip
+RUN mv infomirgroup-stalker_portal-9e60f9025ab6 /var/www/html/stalker_portal/
+RUN rm /tmp/stalker_portal-5.2.0.zip
 
 # Install and configure apache cloudflare module
 RUN wget https://www.cloudflare.com/static/misc/mod_cloudflare/ubuntu/mod_cloudflare-trusty-amd64.latest.deb -O /tmp/mod_cloudflare-trusty-amd64.latest.deb
