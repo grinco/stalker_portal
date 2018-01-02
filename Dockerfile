@@ -11,7 +11,7 @@ RUN apt-get install -y -u apt-utils unzip mysql-client nodejs upstart wget curl 
 # Missing devel packages for the PHP modules installation
 RUN apt-get install -y icu-devtools libxml2-dev
 RUN apt-get install -y libcurl4-nss-dev libtidy-dev
-RUN apt-get install -y libpng-dev
+RUN apt-get install -y libpng-dev libicu-dev
 
 # Install PHP modules
 RUN docker-php-ext-install mysqli
