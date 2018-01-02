@@ -16,7 +16,7 @@ RUN apt-get install -y libpng-dev
 # Install PHP modules
 RUN docker-php-ext-install mysqli
 RUN docker-php-ext-install soap
-#RUN docker-php-ext-install intl
+RUN docker-php-ext-install intl
 RUN docker-php-ext-install gettext
 RUN docker-php-ext-install curl
 RUN docker-php-ext-install tidy
